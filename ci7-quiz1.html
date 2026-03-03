@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🦑 Quiz de Ciências – 7º Ano</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
   :root {
     --dark: #1b2b22;
@@ -12,92 +12,78 @@
     --light: #52b788;
     --pale: #d8f3dc;
     --yellow: #f4d03f;
-    --yellow-dark: #d4ac0d;
     --red: #e74c3c;
-    --red-light: #fdecea;
-    --green: #27ae60;
-    --green-light: #eafaf1;
-    --white: #ffffff;
-    --text: #1b2b22;
-    --radius: 16px;
+    --white: #f9fafb;
+    --radius: 18px;
+    --shadow: 0 8px 32px rgba(44,106,79,0.13);
+
+    --fs-title:        clamp(1.6rem, 5vw, 3rem);
+    --fs-sub:          clamp(1rem, 3vw, 1.5rem);
+    --fs-topic:        clamp(0.75rem, 2vw, 1rem);
+    --fs-question:     clamp(1.1rem, 3.2vw, 1.85rem);
+    --fs-option:       clamp(1rem, 2.6vw, 1.45rem);
+    --fs-feedback:     clamp(0.9rem, 2.2vw, 1.25rem);
+    --fs-btn:          clamp(1rem, 2.8vw, 1.6rem);
+    --fs-counter:      clamp(0.85rem, 2vw, 1.1rem);
+    --fs-score:        clamp(3rem, 10vw, 5rem);
+    --fs-result-title: clamp(1.4rem, 4vw, 2.4rem);
+    --fs-stars:        clamp(1.8rem, 5vw, 2.5rem);
+
+    --card-pad:    clamp(20px, 4vw, 48px);
+    --gap:         clamp(10px, 2vw, 16px);
+    --letter-size: clamp(34px, 6vw, 44px);
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #1b2b22 0%, #2d6a4f 60%, #52b788 100%);
     min-height: 100vh;
-    background: linear-gradient(160deg, var(--dark) 0%, var(--mid) 55%, var(--light) 100%);
-    background-attachment: fixed;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    padding: clamp(12px, 3vw, 32px);
+    padding: clamp(12px, 3vw, 24px);
   }
 
-  /* ── DECORATIVE BACKGROUND ── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      radial-gradient(circle at 15% 25%, rgba(82,183,136,0.15) 0%, transparent 50%),
-      radial-gradient(circle at 85% 70%, rgba(27,43,34,0.4) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .container {
+  #app {
     width: 100%;
-    max-width: 760px;
-    position: relative;
-    z-index: 1;
+    max-width: min(980px, 100%);
   }
 
-  /* ── CARD ── */
-  .card {
-    background: var(--white);
-    border-radius: var(--radius);
-    box-shadow: 0 8px 40px rgba(27,43,34,0.35), 0 2px 8px rgba(27,43,34,0.15);
-    padding: clamp(20px, 5vw, 44px);
-    animation: cardIn 0.5s cubic-bezier(.22,.68,0,1.2) both;
+  /* TELA INICIAL */
+  #screen-intro {
+    text-align: center;
+    color: var(--white);
+    animation: fadeIn 0.6s ease;
+    padding: clamp(16px, 4vw, 40px);
   }
-
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(28px) scale(0.97); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  /* ── SCREEN: INTRO ── */
-  #screen-intro { text-align: center; }
 
   .squid-icon {
     font-size: clamp(52px, 10vw, 88px);
     line-height: 1;
     margin-bottom: 12px;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    display: block;
     animation: float 3s ease-in-out infinite;
   }
 
   @keyframes float {
     0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50%      { transform: translateY(-10px); }
   }
 
-  .intro-title {
+  #screen-intro h1 {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(26px, 6vw, 44px);
-    font-weight: 900;
-    color: var(--dark);
+    font-size: var(--fs-title);
     line-height: 1.15;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
   }
 
-  .intro-subtitle {
-    font-size: clamp(15px, 3vw, 20px);
-    font-weight: 700;
-    color: var(--mid);
-    margin-bottom: 18px;
+  #screen-intro .turma {
+    font-size: var(--fs-sub);
+    opacity: 0.88;
+    margin-bottom: 8px;
   }
 
   .intro-themes {
@@ -105,336 +91,297 @@
     flex-wrap: wrap;
     gap: 8px;
     justify-content: center;
-    margin-bottom: 22px;
+    margin-bottom: clamp(24px, 5vw, 36px);
   }
 
   .theme-pill {
-    background: var(--pale);
-    color: var(--mid);
-    font-size: clamp(12px, 2.2vw, 14px);
+    background: rgba(255,255,255,0.15);
+    color: var(--white);
+    font-size: var(--fs-topic);
     font-weight: 700;
     padding: 5px 14px;
     border-radius: 100px;
-    border: 2px solid var(--light);
-  }
-
-  .intro-divider {
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--mid), var(--light));
-    border-radius: 99px;
-    margin: 0 auto 18px;
+    border: 1.5px solid rgba(255,255,255,0.3);
   }
 
   .prof-name {
-    font-size: clamp(13px, 2.5vw, 16px);
-    color: #666;
-    font-weight: 600;
+    font-size: clamp(0.85rem, 2.5vw, 1.2rem);
+    color: var(--white);
+    opacity: 0.7;
+    font-weight: 700;
     margin-bottom: 28px;
-    letter-spacing: 0.02em;
   }
 
-  .prof-name span { color: var(--mid); font-weight: 800; }
-
-  /* ── BUTTONS ── */
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
+  .btn-start {
     background: var(--yellow);
     color: var(--dark);
-    font-family: 'Nunito', sans-serif;
-    font-size: clamp(15px, 3vw, 18px);
-    font-weight: 800;
-    padding: clamp(12px, 2.5vw, 16px) clamp(28px, 5vw, 44px);
     border: none;
-    border-radius: 100px;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-    box-shadow: 0 4px 18px rgba(244,208,63,0.45);
-    text-decoration: none;
-  }
-  .btn-primary:hover { background: var(--yellow-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(244,208,63,0.5); }
-  .btn-primary:active { transform: translateY(0); }
-
-  .btn-next {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--mid);
-    color: var(--white);
+    border-radius: 50px;
+    padding: clamp(14px, 3vw, 20px) clamp(32px, 7vw, 60px);
     font-family: 'Nunito', sans-serif;
-    font-size: clamp(14px, 2.5vw, 16px);
-    font-weight: 800;
-    padding: clamp(10px, 2vw, 13px) clamp(22px, 4vw, 36px);
-    border: none;
-    border-radius: 100px;
+    font-size: var(--fs-btn);
+    font-weight: 900;
     cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-    box-shadow: 0 3px 14px rgba(45,106,79,0.4);
-    margin-top: 20px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+    transition: transform 0.15s, box-shadow 0.15s;
   }
-  .btn-next:hover { background: var(--dark); transform: translateY(-2px); }
-  .btn-next:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+  .btn-start:hover  { transform: scale(1.06); }
+  .btn-start:active { transform: scale(0.97); }
 
-  /* ── PROGRESS BAR ── */
-  .progress-wrap {
-    margin-bottom: clamp(16px, 3vw, 24px);
-  }
+  /* TELA QUIZ */
+  #screen-quiz { animation: fadeIn 0.5s ease; }
 
-  .progress-label {
+  .q-counter {
+    color: rgba(255,255,255,0.8);
+    font-size: var(--fs-counter);
+    font-weight: 700;
     display: flex;
     justify-content: space-between;
-    font-size: clamp(11px, 2vw, 13px);
-    font-weight: 700;
-    color: #888;
-    margin-bottom: 7px;
+    margin-bottom: 8px;
   }
 
-  .progress-bar-bg {
-    background: #e8f5e9;
-    border-radius: 99px;
-    height: 10px;
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.18);
+    border-radius: 50px;
+    height: clamp(7px, 1.5vw, 10px);
+    margin-bottom: clamp(14px, 3vw, 24px);
     overflow: hidden;
   }
 
-  .progress-bar-fill {
+  .progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, var(--mid), var(--light));
-    border-radius: 99px;
-    transition: width 0.5s cubic-bezier(.22,.68,0,1.2);
+    background: var(--yellow);
+    border-radius: 50px;
+    transition: width 0.5s ease;
   }
 
-  /* ── QUESTION ── */
-  .q-number {
-    font-size: clamp(11px, 2vw, 13px);
-    font-weight: 800;
-    color: var(--light);
+  /* CARD */
+  .card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: var(--card-pad);
+  }
+
+  .q-label {
+    font-size: var(--fs-topic);
+    font-weight: 700;
+    color: var(--mid);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 8px;
+    letter-spacing: 1.5px;
+    margin-bottom: clamp(10px, 2vw, 14px);
   }
 
   .q-text {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(16px, 3.2vw, 22px);
+    font-size: var(--fs-question);
     font-weight: 700;
     color: var(--dark);
-    line-height: 1.5;
-    margin-bottom: clamp(16px, 3vw, 24px);
+    line-height: 1.4;
+    margin-bottom: clamp(18px, 4vw, 32px);
   }
 
-  /* ── ALTERNATIVES ── */
-  .alternatives {
+  /* ALTERNATIVAS */
+  .options {
     display: grid;
     grid-template-columns: 1fr;
-    gap: clamp(8px, 1.5vw, 12px);
-    margin-bottom: 8px;
+    gap: var(--gap);
   }
 
   @media (min-width: 640px) {
-    .alternatives { grid-template-columns: 1fr 1fr; }
+    .options { grid-template-columns: 1fr 1fr; }
   }
 
-  .alt-btn {
+  .option {
     display: flex;
-    align-items: flex-start;
-    gap: 12px;
+    align-items: center;
+    gap: clamp(10px, 2vw, 16px);
     background: var(--pale);
-    border: 2px solid transparent;
-    border-radius: 12px;
-    padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 18px);
+    border: 3px solid transparent;
+    border-radius: 14px;
+    padding: clamp(12px, 2.5vw, 20px) clamp(14px, 3vw, 24px);
     font-family: 'Nunito', sans-serif;
-    font-size: clamp(13px, 2.3vw, 15px);
-    font-weight: 600;
-    color: var(--text);
+    font-size: var(--fs-option);
+    font-weight: 700;
+    color: var(--dark);
     cursor: pointer;
+    transition: all 0.18s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
     text-align: left;
-    transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
-    line-height: 1.45;
+    width: 100%;
   }
 
-  .alt-btn:hover:not(:disabled) {
-    background: #c7ecd4;
+  .option:hover:not(.disabled) {
     border-color: var(--light);
+    background: #b7e4c7;
     transform: translateY(-2px);
-    box-shadow: 0 4px 14px rgba(82,183,136,0.2);
   }
+  .option:active:not(.disabled) { transform: scale(0.98); }
+  .option.disabled { cursor: default; }
 
-  .alt-btn:disabled { cursor: default; transform: none !important; }
-
-  .alt-letter {
-    display: inline-flex;
+  .option .letter {
+    background: var(--mid);
+    color: #fff;
+    border-radius: 50%;
+    width: var(--letter-size);
+    height: var(--letter-size);
+    min-width: var(--letter-size);
+    display: flex;
     align-items: center;
     justify-content: center;
-    min-width: clamp(24px, 4vw, 30px);
-    height: clamp(24px, 4vw, 30px);
-    background: var(--light);
-    color: var(--white);
-    font-weight: 800;
-    font-size: clamp(12px, 2vw, 14px);
-    border-radius: 8px;
-    flex-shrink: 0;
-    transition: background 0.2s;
-  }
-
-  .alt-btn.correct {
-    background: var(--green-light);
-    border-color: var(--green);
-  }
-  .alt-btn.correct .alt-letter { background: var(--green); }
-
-  .alt-btn.wrong {
-    background: var(--red-light);
-    border-color: var(--red);
-  }
-  .alt-btn.wrong .alt-letter { background: var(--red); }
-
-  .alt-btn.dimmed {
-    opacity: 0.45;
-  }
-
-  /* ── EXPLANATION ── */
-  .explanation {
-    margin-top: clamp(14px, 2.5vw, 20px);
-    padding: clamp(12px, 2vw, 16px) clamp(14px, 3vw, 20px);
-    background: #f0fdf4;
-    border-left: 4px solid var(--green);
-    border-radius: 0 12px 12px 0;
-    font-size: clamp(12px, 2.2vw, 14px);
-    color: #2d4a38;
-    line-height: 1.6;
-    animation: fadeSlide 0.35s ease both;
-  }
-
-  .explanation.wrong-exp {
-    background: #fff8f8;
-    border-left-color: var(--red);
-    color: #5a2a2a;
-  }
-
-  @keyframes fadeSlide {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .exp-icon { font-size: 1.1em; margin-right: 6px; }
-
-  /* ── RESULT SCREEN ── */
-  #screen-result { text-align: center; }
-
-  .result-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(24px, 5vw, 36px);
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
     font-weight: 900;
+    flex-shrink: 0;
+  }
+
+  .option.correct         { background: #b7e4c7; border-color: var(--mid); }
+  .option.correct .letter { background: var(--mid); }
+  .option.wrong           { background: #fce4e4; border-color: var(--red); }
+  .option.wrong   .letter { background: var(--red); }
+  .option.dimmed          { opacity: 0.45; }
+
+  /* FEEDBACK */
+  .feedback-box {
+    margin-top: clamp(14px, 3vw, 24px);
+    padding: clamp(12px, 2.5vw, 18px) clamp(14px, 3vw, 24px);
+    border-radius: 12px;
+    font-size: var(--fs-feedback);
+    font-weight: 700;
+    display: none;
+    gap: clamp(8px, 2vw, 12px);
+    line-height: 1.5;
+    align-items: flex-start;
+  }
+  .feedback-box.show { display: flex; }
+  .feedback-box.ok   { background: #d8f3dc; color: #1b4332; }
+  .feedback-box.err  { background: #fde8e8; color: #7b2020; }
+
+  .feedback-icon {
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    flex-shrink: 0;
+  }
+
+  /* BOTAO PROXIMA */
+  .btn-next {
+    display: block;
+    margin: clamp(18px, 4vw, 28px) auto 0;
+    background: var(--mid);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: clamp(12px, 2.5vw, 16px) clamp(32px, 7vw, 52px);
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 900;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    width: 100%;
+    max-width: 320px;
+  }
+  .btn-next:hover  { background: #1b4332; transform: scale(1.04); }
+  .btn-next:active { transform: scale(0.97); }
+
+  /* RESULTADO */
+  #screen-result {
+    text-align: center;
+    color: var(--white);
+    animation: fadeIn 0.5s ease;
+  }
+
+  .result-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: clamp(28px, 6vw, 52px) clamp(20px, 5vw, 48px);
+    margin-bottom: clamp(18px, 4vw, 28px);
     color: var(--dark);
-    margin-bottom: 6px;
   }
 
-  .stars-row {
-    font-size: clamp(28px, 6vw, 44px);
-    margin: 12px 0;
-    letter-spacing: 4px;
+  .result-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: var(--fs-result-title);
+    color: var(--mid);
+    margin-bottom: 12px;
   }
 
-  .score-big {
-    font-size: clamp(44px, 10vw, 72px);
-    font-weight: 800;
+  .score-number {
+    font-size: var(--fs-score);
+    font-weight: 900;
     color: var(--mid);
     line-height: 1;
-    margin-bottom: 4px;
+    margin: 10px 0;
   }
 
-  .score-label {
-    font-size: clamp(13px, 2.5vw, 16px);
-    color: #888;
-    font-weight: 600;
-    margin-bottom: 24px;
+  .score-sub {
+    font-size: clamp(0.95rem, 2.8vw, 1.4rem);
+    color: #555;
+    margin-bottom: 16px;
+    padding: 0 clamp(0px, 4vw, 20px);
   }
 
-  .score-msg {
-    font-size: clamp(14px, 2.8vw, 18px);
-    font-weight: 700;
+  .star-row { font-size: var(--fs-stars); margin-bottom: 8px; }
+
+  /* GABARITO */
+  .review-btn {
+    background: transparent;
+    border: 2px solid var(--mid);
     color: var(--mid);
-    margin-bottom: 28px;
-    padding: 12px 20px;
-    background: var(--pale);
-    border-radius: 12px;
-    display: inline-block;
-  }
-
-  /* ── GABARITO RETRÁTIL ── */
-  .gabarito-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: clamp(12px, 2vw, 16px) clamp(14px, 3vw, 20px);
-    background: var(--pale);
-    border: 2px solid var(--light);
-    border-radius: 12px;
+    border-radius: 50px;
+    padding: 10px 28px;
     font-family: 'Nunito', sans-serif;
-    font-size: clamp(13px, 2.3vw, 15px);
-    font-weight: 800;
-    color: var(--mid);
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.2s;
-    margin-bottom: 4px;
+    margin-bottom: 16px;
+    transition: all 0.2s;
   }
-  .gabarito-toggle:hover { background: #c7ecd4; }
+  .review-btn:hover { background: var(--mid); color: #fff; }
 
-  .toggle-arrow {
-    transition: transform 0.3s;
-    font-size: 1.2em;
-  }
-  .toggle-arrow.open { transform: rotate(180deg); }
+  #review-list { text-align: left; margin-top: 16px; }
 
-  .gabarito-body {
-    display: none;
-    text-align: left;
-    border: 2px solid #e0f0e8;
-    border-top: none;
-    border-radius: 0 0 12px 12px;
-    overflow: hidden;
-    margin-bottom: 20px;
-  }
-  .gabarito-body.open { display: block; }
-
-  .gab-item {
-    padding: clamp(10px, 2vw, 14px) clamp(14px, 3vw, 20px);
-    border-bottom: 1px solid #e8f5e9;
-    font-size: clamp(12px, 2.1vw, 14px);
+  .review-item {
+    border-left: 4px solid;
+    border-radius: 0 10px 10px 0;
+    padding: clamp(8px, 2vw, 12px) clamp(10px, 2.5vw, 16px);
+    margin-bottom: 10px;
+    font-size: clamp(0.85rem, 2.2vw, 1rem);
     line-height: 1.5;
   }
-  .gab-item:last-child { border-bottom: none; }
-  .gab-item.hit { background: #f0fdf4; }
-  .gab-item.miss { background: #fff8f8; }
+  .review-item.ok-item  { background: #d8f3dc; border-color: var(--mid); }
+  .review-item.err-item { background: #fde8e8; border-color: var(--red); }
+  .review-item strong   { display: block; margin-bottom: 4px; font-size: clamp(0.9rem, 2.3vw, 1.05rem); }
 
-  .gab-q {
-    font-weight: 700;
+  .btn-restart {
+    background: var(--yellow);
     color: var(--dark);
-    margin-bottom: 4px;
+    border: none;
+    border-radius: 50px;
+    padding: clamp(14px, 3vw, 18px) clamp(32px, 7vw, 52px);
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(1rem, 2.8vw, 1.4rem);
+    font-weight: 900;
+    cursor: pointer;
+    transition: transform 0.15s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
   }
+  .btn-restart:hover { transform: scale(1.05); }
 
-  .gab-answer {
-    font-weight: 600;
-    font-size: clamp(11px, 2vw, 13px);
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
-  .gab-answer.hit { color: var(--green); }
-  .gab-answer.miss { color: var(--red); }
 
   .hidden { display: none !important; }
 </style>
 </head>
 <body>
-<div class="container">
+<div id="app">
 
-  <!-- ═══════════ TELA INICIAL ═══════════ -->
-  <div class="card" id="screen-intro">
-    <div class="squid-icon">🦑</div>
-    <h1 class="intro-title">Quiz de Ciências</h1>
-    <p class="intro-subtitle">7º Ano — Ensino Fundamental</p>
-    <div class="intro-divider"></div>
+  <!-- TELA INICIAL -->
+  <div id="screen-intro">
+    <span class="squid-icon">🦑</span>
+    <h1>Quiz de Ciências</h1>
+    <p class="turma">7º Ano — Ensino Fundamental</p>
     <div class="intro-themes">
       <span class="theme-pill">🧬 Características dos Seres Vivos</span>
       <span class="theme-pill">🔬 Células</span>
@@ -442,177 +389,171 @@
       <span class="theme-pill">🌿 Célula Animal × Vegetal</span>
       <span class="theme-pill">🧫 Organelas Celulares</span>
     </div>
-    <p class="prof-name">Prof. <span>Pierre Penteado</span></p>
-    <button class="btn-primary" onclick="startQuiz()">▶ Iniciar Quiz</button>
+    <p class="prof-name">Prof. Pierre Penteado</p>
+    <button class="btn-start" onclick="startQuiz()">▶ Iniciar Quiz</button>
   </div>
 
-  <!-- ═══════════ TELA DE QUESTÃO ═══════════ -->
-  <div class="card hidden" id="screen-quiz">
-    <div class="progress-wrap">
-      <div class="progress-label">
-        <span id="prog-text">Questão 1 de 10</span>
-        <span id="prog-score">0 acertos</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="prog-bar" style="width:0%"></div>
-      </div>
+  <!-- TELA QUIZ -->
+  <div id="screen-quiz" class="hidden">
+    <div class="q-counter">
+      <span id="q-counter-text">Questão 1 de 10</span>
+      <span id="q-counter-score">0 acertos</span>
     </div>
-
-    <p class="q-number" id="q-number">Questão 1</p>
-    <p class="q-text" id="q-text"></p>
-
-    <div class="alternatives" id="alternatives"></div>
-    <div id="explanation-box"></div>
-
-    <div style="text-align:right;">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+    </div>
+    <div class="card">
+      <div class="q-label" id="q-label"></div>
+      <div class="q-text"  id="q-text"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback-box" id="feedback-box"></div>
       <button class="btn-next hidden" id="btn-next" onclick="nextQuestion()">Próxima →</button>
     </div>
   </div>
 
-  <!-- ═══════════ TELA DE RESULTADO ═══════════ -->
-  <div class="card hidden" id="screen-result">
-    <div class="result-title" id="result-title">Resultado Final</div>
-    <div class="stars-row" id="stars-row"></div>
-    <div class="score-big" id="score-big"></div>
-    <div class="score-label">de 10 questões</div>
-    <div class="score-msg" id="score-msg"></div>
-
-    <button class="gabarito-toggle" onclick="toggleGabarito(this)">
-      📋 Ver Gabarito Detalhado
-      <span class="toggle-arrow" id="toggle-arrow">▼</span>
-    </button>
-    <div class="gabarito-body" id="gabarito-body"></div>
-
-    <button class="btn-primary" onclick="restartQuiz()" style="margin-top:8px;">🔄 Reiniciar Quiz</button>
+  <!-- TELA RESULTADO -->
+  <div id="screen-result" class="hidden">
+    <div class="result-card">
+      <h2 id="result-title">Quiz Concluído! 🏆</h2>
+      <div class="star-row"     id="stars"></div>
+      <div class="score-number" id="score-display"></div>
+      <div class="score-sub"    id="score-msg"></div>
+      <button class="review-btn" onclick="toggleReview(this)">📋 Ver gabarito detalhado</button>
+      <div id="review-list" class="hidden"></div>
+    </div>
+    <button class="btn-restart" onclick="restartQuiz()">🔄 Tentar Novamente</button>
   </div>
 
 </div>
-
 <script>
-const QUESTIONS = [
+const questions = [
   {
-    text: "Qual das seguintes características é EXCLUSIVA dos seres vivos em relação à matéria inanimada?",
+    topic: "Características dos Seres Vivos",
+    question: "Qual das seguintes características é EXCLUSIVA dos seres vivos em relação à matéria inanimada?",
     options: [
       "Possuir massa e ocupar espaço",
       "Realizar trocas de energia com o ambiente",
       "Apresentar organização celular e metabolismo",
       "Ser formado por átomos de carbono, hidrogênio e oxigênio"
     ],
-    correct: 2,
-    explanation: "✅ Os seres vivos são organizados em células e realizam metabolismo (conjunto de reações químicas que mantêm a vida). Matéria inanimada pode ter massa, trocar energia e conter os mesmos elementos, mas não possui organização celular nem metabolismo."
+    answer: 2,
+    explanation: "Os seres vivos são organizados em células e realizam metabolismo. Matéria inanimada pode ter massa, trocar energia e conter os mesmos elementos, mas não possui organização celular nem metabolismo."
   },
   {
-    text: "Pedro observou que um ser vivo cresce, se reproduz e reage a estímulos do ambiente. Essas são características vitais. Qual outra característica é igualmente essencial para classificar algo como ser vivo?",
+    topic: "Características dos Seres Vivos",
+    question: "Pedro observou que um ser vivo cresce, se reproduz e reage a estímulos. Qual outra característica é igualmente essencial para classificar algo como ser vivo?",
     options: [
       "Ter cor verde devido à clorofila",
       "Realizar fotossíntese para obter energia",
       "Apresentar homeostase e evoluir ao longo das gerações",
       "Ter tamanho microscópico"
     ],
-    correct: 2,
-    explanation: "✅ Homeostase (manutenção do equilíbrio interno) e capacidade evolutiva são características fundamentais dos seres vivos. Nem todo ser vivo é verde ou faz fotossíntese (animais e fungos, por exemplo, não fazem), e muitos seres vivos são macroscópicos."
+    answer: 2,
+    explanation: "Homeostase (equilíbrio interno) e capacidade evolutiva são características fundamentais. Nem todo ser vivo é verde ou faz fotossíntese — animais e fungos não fazem —, e muitos são macroscópicos."
   },
   {
-    text: "A teoria celular estabelece princípios fundamentais sobre as células. Qual das afirmativas abaixo NÃO faz parte dessa teoria?",
+    topic: "Teoria Celular",
+    question: "A teoria celular estabelece princípios fundamentais. Qual das afirmativas abaixo NÃO faz parte dessa teoria?",
     options: [
       "A célula é a unidade básica da vida",
       "Todo ser vivo é formado por uma ou mais células",
       "Toda célula origina-se de uma célula preexistente",
       "Células procariontes são mais complexas que as eucariontes"
     ],
-    correct: 3,
-    explanation: "✅ A teoria celular tem três pilares: célula como unidade da vida, todo ser vivo é formado por células, e toda célula vem de outra célula. A afirmação inversa — de que procariontes são mais complexas — é falsa. Eucariontes são mais complexas, com núcleo definido e organelas membranosas."
+    answer: 3,
+    explanation: "A teoria celular tem três pilares: célula como unidade da vida, todo ser vivo é formado por células, e toda célula vem de outra célula. Afirmar que procariontes são mais complexas é falso — eucariontes possuem núcleo definido e organelas membranosas."
   },
   {
-    text: "Células PROCARIONTES diferem das EUCARIONTES principalmente porque:",
+    topic: "Procarionte × Eucarionte",
+    question: "Células PROCARIONTES diferem das EUCARIONTES principalmente porque:",
     options: [
       "Não possuem membrana plasmática",
       "Não possuem material genético",
       "Não possuem núcleo delimitado por membrana nuclear",
       "Não realizam respiração celular"
     ],
-    correct: 2,
-    explanation: "✅ A principal diferença é que células procariontes (como bactérias) não têm núcleo organizado com membrana nuclear — seu DNA fica disperso no citoplasma (nucleoide). Eucariontes (animais, vegetais, fungos, protistas) têm núcleo bem definido. Ambas possuem membrana plasmática e material genético."
+    answer: 2,
+    explanation: "Células procariontes (como bactérias) não têm núcleo com membrana nuclear — o DNA fica disperso no citoplasma (nucleoide). Eucariontes têm núcleo bem definido. Ambas possuem membrana plasmática e material genético."
   },
   {
-    text: "As bactérias são exemplos clássicos de organismos procariontes. Com base nisso, qual organela celular as bactérias NÃO possuem?",
+    topic: "Procarionte × Eucarionte",
+    question: "As bactérias são exemplos de organismos procariontes. Qual organela celular as bactérias NÃO possuem?",
     options: [
       "Ribossomos",
       "Membrana plasmática",
       "Mitocôndrias",
       "Parede celular"
     ],
-    correct: 2,
-    explanation: "✅ Bactérias são procariontes e não possuem mitocôndrias (organela exclusiva das células eucariontes). Elas produzem energia por processos na membrana plasmática. Possuem ribossomos (para síntese de proteínas), membrana plasmática e parede celular."
+    answer: 2,
+    explanation: "Bactérias não possuem mitocôndrias — organela exclusiva de células eucariontes. Produzem energia por processos na membrana plasmática. Possuem ribossomos, membrana plasmática e parede celular."
   },
   {
-    text: "Uma estudante analisou duas células ao microscópio. A Célula X tinha núcleo definido, mitocôndrias e cloroplastos. A Célula Y tinha núcleo definido, mitocôndrias, mas nenhum cloroplasto. Qual a classificação mais correta?",
+    topic: "Célula Animal × Vegetal",
+    question: "A Célula X tinha núcleo, mitocôndrias e cloroplastos. A Célula Y tinha núcleo e mitocôndrias, mas nenhum cloroplasto. Qual a classificação correta?",
     options: [
       "X é animal e Y é vegetal",
       "X é procarionte e Y é eucarionte",
       "X é vegetal e Y é animal",
       "Ambas são procariontes"
     ],
-    correct: 2,
-    explanation: "✅ Cloroplastos são organelas exclusivas das células vegetais (e algas), responsáveis pela fotossíntese. A Célula X (com cloroplasto) é vegetal; a Célula Y (sem cloroplasto, com mitocôndria) é animal. Ambas são eucariontes por terem núcleo definido."
+    answer: 2,
+    explanation: "Cloroplastos são exclusivos das células vegetais (e algas). A Célula X (com cloroplasto) é vegetal; a Célula Y (sem cloroplasto) é animal. Ambas são eucariontes por terem núcleo definido."
   },
   {
-    text: "O VACÚOLO central das células vegetais tem um papel fundamental na manutenção da forma da célula. Qual é a principal função dessa organela?",
+    topic: "Organelas — Vacúolo",
+    question: "O VACÚOLO central das células vegetais tem papel fundamental. Qual é a sua principal função?",
     options: [
       "Realizar a fotossíntese armazenando clorofila",
       "Produzir energia por meio da respiração celular",
       "Armazenar água, nutrientes e manter a pressão de turgor",
       "Sintetizar proteínas para exportação"
     ],
-    correct: 2,
-    explanation: "✅ O vacúolo central das plantas pode ocupar até 90% do volume celular. Armazena água, sais, açúcares e substâncias de reserva, mantendo a pressão de turgor — que dá rigidez à planta. A fotossíntese ocorre nos cloroplastos; a energia vem das mitocôndrias; proteínas são sintetizadas nos ribossomos."
+    answer: 2,
+    explanation: "O vacúolo central pode ocupar até 90% do volume celular vegetal. Armazena água, sais e açúcares, mantendo a pressão de turgor que dá rigidez à planta. Fotossíntese ocorre nos cloroplastos; energia nas mitocôndrias; proteínas nos ribossomos."
   },
   {
-    text: "A mitocôndria é conhecida como a 'usina de energia da célula'. Qual processo ocorre nessa organela?",
+    topic: "Organelas — Mitocôndria",
+    question: "A mitocôndria é conhecida como a 'usina de energia da célula'. Qual processo ocorre nessa organela?",
     options: [
       "Fotossíntese, transformando luz em glicose",
       "Respiração celular, transformando glicose em ATP",
       "Síntese de proteínas a partir do RNA",
       "Digestão intracelular de resíduos"
     ],
-    correct: 1,
-    explanation: "✅ Na mitocôndria ocorre a respiração celular aeróbia, que quebra a glicose e produz ATP (adenosina trifosfato) — a 'moeda energética' da célula. A fotossíntese ocorre nos cloroplastos; proteínas são sintetizadas nos ribossomos; a digestão intracelular ocorre nos lisossomos."
+    answer: 1,
+    explanation: "Na mitocôndria ocorre a respiração celular aeróbia, que quebra a glicose e produz ATP — a 'moeda energética' da célula. Fotossíntese ocorre nos cloroplastos; proteínas nos ribossomos; digestão intracelular nos lisossomos."
   },
   {
-    text: "Qual das organelas abaixo está presente na célula animal, mas AUSENTE na célula vegetal típica?",
+    topic: "Célula Animal × Vegetal",
+    question: "Qual organela está presente na célula animal, mas AUSENTE na célula vegetal típica?",
     options: [
       "Ribossomo",
       "Mitocôndria",
       "Centríolo",
       "Retículo endoplasmático"
     ],
-    correct: 2,
-    explanation: "✅ Os centríolos participam da divisão celular (formam o fuso mitótico) e estão presentes nas células animais. Células vegetais superiores geralmente não têm centríolos, pois formam o fuso mitótico de outra forma. Ribossomos, mitocôndrias e retículo endoplasmático estão em ambos os tipos celulares."
+    answer: 2,
+    explanation: "Os centríolos formam o fuso mitótico na divisão celular e estão presentes nas células animais. Células vegetais superiores geralmente não os possuem. Ribossomos, mitocôndrias e retículo endoplasmático estão em ambos os tipos."
   },
   {
-    text: "Um ser vivo unicelular eucarionte foi encontrado em uma amostra de água de lago. Ele possui núcleo, mitocôndrias, mas nenhuma parede celular nem cloroplasto. A qual grupo esse organismo provavelmente pertence?",
+    topic: "Classificação dos Seres Vivos",
+    question: "Um ser vivo unicelular eucarionte tem núcleo e mitocôndrias, mas nenhuma parede celular nem cloroplasto. A qual grupo pertence?",
     options: [
       "Bactérias (Reino Monera)",
       "Fungos (Reino Fungi)",
       "Protistas animais (Protozoários)",
       "Plantas (Reino Plantae)"
     ],
-    correct: 2,
-    explanation: "✅ O organismo é eucarionte (tem núcleo) e unicelular, sem parede celular e sem cloroplasto. Isso é característico de protozoários (como ameba e paramécio), pertencentes ao grupo dos Protistas. Bactérias são procariontes; fungos têm parede celular (de quitina); plantas têm parede celular e cloroplastos."
+    answer: 2,
+    explanation: "O organismo é eucarionte, unicelular, sem parede celular e sem cloroplasto — característico de protozoários (ameba, paramécio), pertencentes aos Protistas. Bactérias são procariontes; fungos têm parede celular de quitina; plantas têm parede e cloroplastos."
   }
 ];
 
-let currentQ = 0;
-let score = 0;
-let answered = false;
+let current = 0, score = 0, answered = false;
 let userAnswers = [];
-const letters = ['A', 'B', 'C', 'D'];
+const LETTERS = ['A','B','C','D'];
 
 function startQuiz() {
-  currentQ = 0;
-  score = 0;
-  answered = false;
-  userAnswers = [];
   document.getElementById('screen-intro').classList.add('hidden');
   document.getElementById('screen-result').classList.add('hidden');
   document.getElementById('screen-quiz').classList.remove('hidden');
@@ -621,129 +562,111 @@ function startQuiz() {
 
 function renderQuestion() {
   answered = false;
-  const q = QUESTIONS[currentQ];
-  document.getElementById('q-number').textContent = `Questão ${currentQ + 1}`;
-  document.getElementById('q-text').textContent = q.text;
-  document.getElementById('explanation-box').innerHTML = '';
-  document.getElementById('btn-next').classList.add('hidden');
+  const q = questions[current];
+  const total = questions.length;
 
-  // Progress
-  const pct = (currentQ / QUESTIONS.length) * 100;
-  document.getElementById('prog-bar').style.width = pct + '%';
-  document.getElementById('prog-text').textContent = `Questão ${currentQ + 1} de ${QUESTIONS.length}`;
-  document.getElementById('prog-score').textContent = `${score} acerto${score !== 1 ? 's' : ''}`;
+  document.getElementById('q-counter-text').textContent  = `Questão ${current + 1} de ${total}`;
+  document.getElementById('q-counter-score').textContent = `${score} acerto${score !== 1 ? 's' : ''}`;
+  document.getElementById('progress-bar').style.width    = `${(current / total) * 100}%`;
+  document.getElementById('q-label').textContent = `📌 ${q.topic}`;
+  document.getElementById('q-text').textContent  = q.question;
 
-  // Options
-  const alts = document.getElementById('alternatives');
-  alts.innerHTML = '';
+  const optionsEl = document.getElementById('options');
+  optionsEl.innerHTML = '';
   q.options.forEach((opt, i) => {
     const btn = document.createElement('button');
-    btn.className = 'alt-btn';
-    btn.innerHTML = `<span class="alt-letter">${letters[i]}</span><span>${opt}</span>`;
-    btn.onclick = () => selectAnswer(i);
-    alts.appendChild(btn);
+    btn.className = 'option';
+    btn.innerHTML = `<span class="letter">${LETTERS[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectOption(i, btn);
+    optionsEl.appendChild(btn);
   });
+
+  document.getElementById('feedback-box').className = 'feedback-box';
+  document.getElementById('feedback-box').innerHTML  = '';
+  document.getElementById('btn-next').classList.add('hidden');
 }
 
-function selectAnswer(idx) {
+function selectOption(index, el) {
   if (answered) return;
   answered = true;
 
-  const q = QUESTIONS[currentQ];
-  const btns = document.querySelectorAll('.alt-btn');
-  const isCorrect = idx === q.correct;
+  const q = questions[current];
+  const allOptions = document.querySelectorAll('.option');
+  allOptions.forEach(o => { o.classList.add('disabled'); o.disabled = true; });
 
-  if (isCorrect) score++;
-  userAnswers.push({ qIdx: currentQ, chosen: idx, correct: q.correct, hit: isCorrect });
+  const correct = index === q.answer;
+  if (correct) score++;
+  userAnswers.push({ q, chosen: index, correct });
 
-  btns.forEach((btn, i) => {
-    btn.disabled = true;
-    if (i === q.correct) {
-      btn.classList.add('correct');
-    } else if (i === idx && !isCorrect) {
-      btn.classList.add('wrong');
-    } else {
-      btn.classList.add('dimmed');
-    }
-  });
+  if (correct) {
+    el.classList.add('correct');
+  } else {
+    el.classList.add('wrong');
+    allOptions[q.answer].classList.add('correct');
+  }
 
-  const expBox = document.getElementById('explanation-box');
-  expBox.innerHTML = `<div class="explanation ${isCorrect ? '' : 'wrong-exp'}">
-    <strong>${isCorrect ? '🎉 Correto!' : '❌ Incorreto!'}</strong><br>
-    ${q.explanation}
-  </div>`;
+  const fb = document.getElementById('feedback-box');
+  fb.innerHTML = correct
+    ? `<span class="feedback-icon">✅</span><span><strong>Correto!</strong> ${q.explanation}</span>`
+    : `<span class="feedback-icon">❌</span><span><strong>Incorreto.</strong> A resposta certa é a <strong>${LETTERS[q.answer]}</strong>. ${q.explanation}</span>`;
+  fb.className = `feedback-box show ${correct ? 'ok' : 'err'}`;
 
-  document.getElementById('prog-score').textContent = `${score} acerto${score !== 1 ? 's' : ''}`;
+  document.getElementById('q-counter-score').textContent = `${score} acerto${score !== 1 ? 's' : ''}`;
 
-  const btnNext = document.getElementById('btn-next');
-  btnNext.classList.remove('hidden');
-  btnNext.textContent = currentQ < QUESTIONS.length - 1 ? 'Próxima →' : 'Ver Resultado 🏆';
+  const btn = document.getElementById('btn-next');
+  btn.classList.remove('hidden');
+  btn.textContent = current + 1 < questions.length ? 'Próxima →' : 'Ver Resultado 🏆';
 }
 
 function nextQuestion() {
-  currentQ++;
-  if (currentQ >= QUESTIONS.length) {
-    showResult();
-  } else {
-    document.getElementById('screen-quiz').style.animation = 'none';
-    setTimeout(() => {
-      document.getElementById('screen-quiz').style.animation = '';
-      renderQuestion();
-    }, 10);
-  }
+  current++;
+  current < questions.length ? renderQuestion() : showResult();
 }
 
 function showResult() {
   document.getElementById('screen-quiz').classList.add('hidden');
   document.getElementById('screen-result').classList.remove('hidden');
+  document.getElementById('progress-bar').style.width = '100%';
 
-  const pct = score / QUESTIONS.length;
-  let stars = '⭐⭐⭐⭐⭐';
-  let msg = '';
-  let title = '';
+  const total = questions.length;
+  const pct   = score / total;
+  document.getElementById('score-display').textContent = `${score} / ${total}`;
 
-  if (pct >= 0.9) {
-    stars = '⭐⭐⭐⭐⭐'; title = '🏆 Excelente!'; msg = 'Parabéns! Você domina o conteúdo de células e seres vivos!';
-  } else if (pct >= 0.7) {
-    stars = '⭐⭐⭐⭐'; title = '👏 Muito Bom!'; msg = 'Ótimo desempenho! Revise os itens que errou para fixar tudo.';
-  } else if (pct >= 0.5) {
-    stars = '⭐⭐⭐'; title = '📚 Bom progresso!'; msg = 'Você está no caminho certo. Vale reler o material e tentar novamente!';
-  } else if (pct >= 0.3) {
-    stars = '⭐⭐'; title = '💪 Continue estudando!'; msg = 'Não desanime! Revise os temas de células e seres vivos e tente de novo.';
-  } else {
-    stars = '⭐'; title = '🔁 Hora de revisar!'; msg = 'Releia o caderno e as anotações. Você consegue melhorar!';
-  }
-
-  document.getElementById('result-title').textContent = title;
-  document.getElementById('stars-row').textContent = stars;
-  document.getElementById('score-big').textContent = score;
+  const levels = [
+    [1,         "Perfeito! Gabarito completo! 🎉",               "⭐⭐⭐⭐⭐"],
+    [0.8,       "Excelente! Você dominou o conteúdo!",           "⭐⭐⭐⭐"],
+    [0.6,       "Muito bem! Vale revisar alguns pontos.",         "⭐⭐⭐"],
+    [0.4,       "Razoável. Revise o conteúdo!",                   "⭐⭐"],
+    [-Infinity, "Não desanime! Revise as aulas e tente de novo.", "⭐"]
+  ];
+  const [, msg, stars] = levels.find(([t]) => pct >= t);
   document.getElementById('score-msg').textContent = msg;
+  document.getElementById('stars').textContent     = stars;
 
-  // Build gabarito
-  const gab = document.getElementById('gabarito-body');
-  gab.innerHTML = userAnswers.map((ua, i) => {
-    const q = QUESTIONS[ua.qIdx];
-    return `<div class="gab-item ${ua.hit ? 'hit' : 'miss'}">
-      <div class="gab-q">${i + 1}. ${q.text}</div>
-      <div class="gab-answer ${ua.hit ? 'hit' : 'miss'}">
-        ${ua.hit ? '✅ Você acertou: ' : '❌ Você marcou: '}<strong>${letters[ua.chosen]}) ${q.options[ua.chosen]}</strong>
-        ${!ua.hit ? `<br>✅ Resposta correta: <strong>${letters[ua.correct]}) ${q.options[ua.correct]}</strong>` : ''}
-      </div>
-    </div>`;
-  }).join('');
-  gab.classList.remove('open');
-  document.getElementById('toggle-arrow').classList.remove('open');
+  const rev = document.getElementById('review-list');
+  rev.innerHTML = userAnswers.map((ua, i) =>
+    `<div class="review-item ${ua.correct ? 'ok-item' : 'err-item'}">
+      <strong>${i + 1}. ${ua.q.question}</strong>
+      ${ua.correct
+        ? `✅ Você acertou: <strong>${LETTERS[ua.chosen]}</strong>`
+        : `❌ Você escolheu <strong>${LETTERS[ua.chosen]}</strong> · Correto: <strong>${LETTERS[ua.q.answer]}</strong>`}
+      <br><em>${ua.q.explanation}</em>
+    </div>`
+  ).join('');
 }
 
-function toggleGabarito(btn) {
-  const body = document.getElementById('gabarito-body');
-  const arrow = document.getElementById('toggle-arrow');
-  body.classList.toggle('open');
-  arrow.classList.toggle('open');
+function toggleReview(btn) {
+  const rev = document.getElementById('review-list');
+  rev.classList.toggle('hidden');
+  btn.textContent = rev.classList.contains('hidden')
+    ? '📋 Ver gabarito detalhado'
+    : '🙈 Ocultar gabarito';
 }
 
 function restartQuiz() {
+  current = 0; score = 0; answered = false; userAnswers = [];
   document.getElementById('screen-result').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.add('hidden');
   document.getElementById('screen-intro').classList.remove('hidden');
 }
 </script>
