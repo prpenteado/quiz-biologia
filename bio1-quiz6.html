@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Proteínas — 1º Ano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --fs-title:        clamp(1.6rem, 5vw, 3rem);
+    --fs-sub:          clamp(1rem, 3vw, 1.5rem);
+    --fs-topic:        clamp(0.75rem, 2vw, 1rem);
+    --fs-question:     clamp(1.1rem, 3.2vw, 1.85rem);
+    --fs-option:       clamp(1rem, 2.6vw, 1.45rem);
+    --fs-feedback:     clamp(0.9rem, 2.2vw, 1.25rem);
+    --fs-btn:          clamp(1rem, 2.8vw, 1.6rem);
+    --fs-counter:      clamp(0.85rem, 2vw, 1.1rem);
+    --fs-score:        clamp(3rem, 10vw, 5rem);
+    --fs-result-title: clamp(1.4rem, 4vw, 2.4rem);
+    --fs-stars:        clamp(1.8rem, 5vw, 2.5rem);
+    --card-pad:        clamp(20px, 4vw, 48px);
+    --gap:             clamp(10px, 2vw, 16px);
+    --letter-size:     clamp(34px, 6vw, 44px);
+  }
+  body {
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1b2b22 0%, #2d6a4f 60%, #52b788 100%);
+    background-attachment: fixed;
+    color: #1b2b22;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 12px 48px;
+  }
+  .container { width: min(980px, 100%); display: flex; flex-direction: column; align-items: center; gap: var(--gap); }
+
+  /* INTRO */
+  #intro-screen { display: flex; flex-direction: column; align-items: center; text-align: center; gap: clamp(12px,3vw,22px); padding-top: clamp(16px,4vw,40px); }
+  .emoji-float { font-size: clamp(3.5rem,12vw,6rem); animation: float 3s ease-in-out infinite; display: block; line-height: 1; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
+  .intro-title { font-family: 'Playfair Display', serif; font-size: var(--fs-title); color: #fff; text-shadow: 0 2px 16px rgba(0,0,0,0.3); line-height: 1.15; }
+  .intro-sub { font-size: var(--fs-sub); color: rgba(255,255,255,0.88); font-weight: 700; }
+  .pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 4px; }
+  .pill { background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.35); color: #fff; border-radius: 50px; padding: 6px 18px; font-size: var(--fs-topic); font-weight: 700; backdrop-filter: blur(4px); letter-spacing: 0.02em; }
+  .prof-name { font-size: clamp(0.8rem,2vw,1rem); color: rgba(255,255,255,0.55); margin-top: 4px; }
+  .btn-start { background: #f4d03f; color: #1b2b22; border: none; border-radius: 50px; padding: clamp(14px,3vw,20px) clamp(32px,7vw,64px); font-size: var(--fs-btn); font-family: 'Nunito',sans-serif; font-weight: 900; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 24px rgba(244,208,63,0.35); transition: transform .15s, box-shadow .15s; }
+  .btn-start:hover { transform: scale(1.04); box-shadow: 0 8px 32px rgba(244,208,63,0.5); }
+
+  /* PROGRESS */
+  #progress-area { width: 100%; display: none; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+  .progress-labels { display: flex; justify-content: space-between; color: #fff; font-size: var(--fs-counter); font-weight: 700; }
+  .progress-track { background: rgba(255,255,255,0.2); border-radius: 50px; height: clamp(10px,2vw,14px); overflow: hidden; width: 100%; }
+  .progress-bar { background: #f4d03f; height: 100%; border-radius: 50px; transition: width .4s ease; width: 0%; }
+
+  /* CARD */
+  .card { background: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(44,106,79,0.13); padding: var(--card-pad); width: 100%; display: flex; flex-direction: column; gap: var(--gap); }
+  .topic-label { font-size: var(--fs-topic); font-weight: 900; color: #2d6a4f; letter-spacing: 0.08em; text-transform: uppercase; }
+  .question-text { font-size: var(--fs-question); font-weight: 700; color: #1b2b22; line-height: 1.4; }
+
+  /* OPTIONS */
+  .options-grid { display: grid; grid-template-columns: 1fr; gap: var(--gap); }
+  @media (min-width: 640px) { .options-grid { grid-template-columns: 1fr 1fr; } }
+  .option-btn { background: #d8f3dc; border: 2px solid transparent; border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; gap: 14px; font-size: var(--fs-option); font-family: 'Nunito',sans-serif; font-weight: 700; color: #1b2b22; cursor: pointer; text-align: left; transition: background .18s, border-color .18s, transform .12s; line-height: 1.3; }
+  .option-btn:hover:not(:disabled) { background: #b7e4c7; transform: translateY(-2px); }
+  .option-letter { min-width: var(--letter-size); height: var(--letter-size); background: #2d6a4f; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: clamp(0.9rem,2.5vw,1.2rem); font-weight: 900; flex-shrink: 0; transition: background .18s; }
+  .option-btn.correct { background: #b7e4c7; border-color: #40916c; }
+  .option-btn.wrong   { background: #fce4e4; border-color: #e07070; }
+  .option-btn.wrong .option-letter { background: #c0392b; }
+  .option-btn:disabled { cursor: default; }
+
+  /* FEEDBACK */
+  .feedback-box { border-radius: 12px; padding: clamp(12px,3vw,20px); font-size: var(--fs-feedback); font-weight: 700; line-height: 1.5; display: none; }
+  .feedback-box.correct { background: #d8f3dc; color: #1b4332; border-left: 5px solid #40916c; }
+  .feedback-box.wrong   { background: #fce4e4; color: #7b1f1f; border-left: 5px solid #c0392b; }
+
+  /* BTN NEXT */
+  .btn-next { background: #2d6a4f; color: #fff; border: none; border-radius: 50px; padding: clamp(12px,2.5vw,18px) clamp(28px,6vw,56px); font-size: var(--fs-btn); font-family: 'Nunito',sans-serif; font-weight: 900; cursor: pointer; align-self: flex-end; display: none; transition: transform .15s, box-shadow .15s; box-shadow: 0 4px 16px rgba(45,106,79,0.25); }
+  .btn-next:hover { transform: scale(1.04); box-shadow: 0 8px 24px rgba(45,106,79,0.35); }
+
+  /* RESULT */
+  #result-screen { display: none; flex-direction: column; gap: clamp(16px,3vw,28px); align-items: center; }
+  .result-card { background: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(44,106,79,0.13); padding: var(--card-pad); width: 100%; display: flex; flex-direction: column; align-items: center; gap: clamp(12px,3vw,22px); text-align: center; }
+  .result-title { font-family: 'Playfair Display', serif; font-size: var(--fs-result-title); color: #1b2b22; }
+  .score-display { font-size: var(--fs-score); font-weight: 900; color: #2d6a4f; line-height: 1; }
+  .stars { font-size: var(--fs-stars); letter-spacing: 4px; }
+  .result-msg { font-size: var(--fs-sub); font-weight: 700; color: #1b2b22; line-height: 1.4; }
+  .btn-retry { background: #f4d03f; color: #1b2b22; border: none; border-radius: 50px; padding: clamp(12px,2.5vw,18px) clamp(28px,6vw,56px); font-size: var(--fs-btn); font-family: 'Nunito',sans-serif; font-weight: 900; cursor: pointer; transition: transform .15s, box-shadow .15s; box-shadow: 0 4px 24px rgba(244,208,63,0.35); }
+  .btn-retry:hover { transform: scale(1.04); box-shadow: 0 8px 32px rgba(244,208,63,0.5); }
+
+  /* GABARITO */
+  .gabarito-toggle { background: none; border: 2px solid #2d6a4f; border-radius: 50px; color: #2d6a4f; padding: 10px 28px; font-size: var(--fs-counter); font-family: 'Nunito',sans-serif; font-weight: 900; cursor: pointer; transition: background .18s, color .18s; }
+  .gabarito-toggle:hover { background: #2d6a4f; color: #fff; }
+  .gabarito-list { width: 100%; display: none; flex-direction: column; gap: 10px; text-align: left; margin-top: 4px; }
+  .gabarito-list.open { display: flex; }
+  .gabarito-item { background: #f4f9f6; border-radius: 12px; padding: 12px 16px; font-size: var(--fs-feedback); line-height: 1.5; border-left: 5px solid #40916c; }
+  .gabarito-item.wrong-ans { border-left-color: #c0392b; }
+  .gabarito-item strong { color: #1b4332; }
+  .gabarito-item .g-label { font-size: clamp(0.7rem,1.8vw,0.88rem); font-weight: 900; color: #2d6a4f; text-transform: uppercase; letter-spacing: 0.06em; }
+  .gabarito-item.wrong-ans .g-label { color: #c0392b; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div id="intro-screen">
+    <span class="emoji-float">🧬</span>
+    <h1 class="intro-title">Proteínas</h1>
+    <p class="intro-sub">1º Ano — Ensino Médio</p>
+    <div class="pills">
+      <span class="pill">Estrutura</span>
+      <span class="pill">Funções Biológicas</span>
+      <span class="pill">Digestão e Síntese</span>
+    </div>
+    <p class="prof-name">Prof. Pierre Penteado</p>
+    <button class="btn-start" onclick="startQuiz()">▶ Iniciar Quiz</button>
+  </div>
+
+  <div id="progress-area">
+    <div class="progress-labels">
+      <span id="counter-label">Questão 1 de 10</span>
+      <span id="score-label">0 acertos</span>
+    </div>
+    <div class="progress-track"><div class="progress-bar" id="progress-bar"></div></div>
+  </div>
+
+  <div class="card" id="question-card" style="display:none;">
+    <div class="topic-label" id="q-topic"></div>
+    <div class="question-text" id="q-text"></div>
+    <div class="options-grid" id="q-options"></div>
+    <div class="feedback-box" id="q-feedback"></div>
+    <button class="btn-next" id="btn-next" onclick="nextQuestion()">Próxima ➜</button>
+  </div>
+
+  <div id="result-screen">
+    <div class="result-card">
+      <p class="result-title">Resultado Final 🎉</p>
+      <div class="score-display" id="final-score"></div>
+      <div class="stars" id="final-stars"></div>
+      <p class="result-msg" id="final-msg"></p>
+      <button class="gabarito-toggle" onclick="toggleGabarito()">📋 Ver Gabarito</button>
+      <div class="gabarito-list" id="gabarito-list"></div>
+      <button class="btn-retry" onclick="restartQuiz()">🔄 Tentar Novamente</button>
+    </div>
+  </div>
+
+</div>
+<script>
+const questions = [
+  {
+    topic: "📌 O Que São Proteínas",
+    question: "As proteínas são as biomoléculas mais abundantes nos seres vivos. Qual é a sua unidade básica de construção?",
+    options: [
+      "Glicose — o mesmo açúcar que serve de combustível para as células",
+      "Ácidos graxos — os mesmos blocos que formam as gorduras",
+      "Aminoácidos — pequenas moléculas unidas por ligações peptídicas",
+      "Nucleotídeos — os mesmos blocos que formam o DNA"
+    ],
+    correct: 2,
+    feedback: "✅ Isso! As proteínas são formadas por cadeias de aminoácidos conectados por ligações peptídicas. É como um colar de contas — cada conta é um aminoácido diferente, e a ordem em que aparecem define qual proteína será formada e qual função ela terá."
+  },
+  {
+    topic: "📌 Fontes de Proteínas na Dieta",
+    question: "Uma estudante decidiu ser vegana e parou de comer qualquer produto de origem animal. Quais alimentos ela pode usar para garantir sua ingestão de proteínas?",
+    options: [
+      "Apenas ovos e queijos, que são os mais ricos em proteínas",
+      "Soja, feijão, lentilha, grão-de-bico, tofu e castanhas",
+      "Frutas e verduras em geral, que têm toda proteína necessária",
+      "Apenas suplementos industriais, já que plantas não têm proteínas"
+    ],
+    correct: 1,
+    feedback: "✅ Correto! Leguminosas como soja, feijão, lentilha e grão-de-bico são excelentes fontes de proteína vegetal. O tofu (feito de soja) e as oleaginosas (castanhas, nozes, amendoim) também contribuem muito. A diferença entre vegetarianismo e veganismo é que vegetarianos excluem carne, mas veganos excluem tudo de origem animal."
+  },
+  {
+    topic: "📌 Funções das Proteínas — Estrutural",
+    question: "Cabelos, unhas e a firmeza da pele são sustentados por proteínas estruturais. Qual par de proteínas é responsável por isso, respectivamente?",
+    options: [
+      "Hemoglobina e insulina",
+      "Actina e miosina",
+      "Queratina e colágeno",
+      "Anticorpos e enzimas"
+    ],
+    correct: 2,
+    feedback: "✅ Exato! A queratina é a proteína estrutural de cabelos e unhas — por isso tratamentos capilares falam tanto nela. O colágeno sustenta a pele, cartilagens e tendões, sendo a proteína mais abundante do corpo humano. Ambas mostram como as proteínas são literalmente a 'estrutura' do nosso corpo."
+  },
+  {
+    topic: "📌 Funções das Proteínas — Movimento",
+    question: "Quando você levanta um objeto ou corre, seus músculos se contraem. Quais proteínas tornam esse movimento possível?",
+    options: [
+      "Colágeno e queratina, que dão rigidez às fibras musculares",
+      "Hemoglobina e glucagon, que levam energia ao músculo",
+      "Actina e miosina, que deslizam entre si gerando a contração muscular",
+      "Anticorpos e insulina, que regulam o esforço físico"
+    ],
+    correct: 2,
+    feedback: "✅ Perfeito! Actina e miosina são as proteínas do movimento. Quando o músculo recebe o sinal para contrair, as moléculas de miosina 'caminham' sobre os filamentos de actina, encurtando a fibra muscular. Todo movimento do seu corpo — desde piscar os olhos até correr — depende dessas duas proteínas."
+  },
+  {
+    topic: "📌 Funções das Proteínas — Transporte",
+    question: "Uma pessoa com anemia falciforme tem hemácias com formato alterado que transportam menos oxigênio. Isso é causado por um defeito em qual proteína?",
+    options: [
+      "Insulina — proteína que controla a glicose no sangue",
+      "Hemoglobina — proteína dentro das hemácias que carrega o oxigênio",
+      "Colágeno — proteína que dá forma às células do sangue",
+      "Miosina — proteína que movimenta as hemácias pelos vasos"
+    ],
+    correct: 1,
+    feedback: "✅ Isso! A hemoglobina é a proteína dentro das hemácias responsável por pegar o oxigênio nos pulmões e entregá-lo às células do corpo. Na anemia falciforme, uma mutação altera a forma da hemoglobina, que deforma as hemácias em foice — elas transportam menos oxigênio e entopem os vasos."
+  },
+  {
+    topic: "📌 Funções das Proteínas — Defesa",
+    question: "Quando um vírus entra no seu corpo, o sistema imunológico fabrica proteínas específicas para reconhecê-lo e neutralizá-lo. Como essas proteínas se chamam?",
+    options: [
+      "Enzimas — que destroem o vírus quimicamente",
+      "Hormônios — que avisam o corpo sobre a infecção",
+      "Anticorpos — proteínas especializadas em reconhecer e neutralizar agentes estranhos",
+      "Queratinas — que formam uma barreira física contra vírus"
+    ],
+    correct: 2,
+    feedback: "✅ Correto! Os anticorpos são proteínas produzidas pelos linfócitos (células de defesa). Cada anticorpo tem um formato específico que reconhece um invasor em particular — como uma chave que só encaixa numa fechadura. É por isso que vacinas funcionam: elas treinam o corpo a produzir anticorpos antes da doença chegar."
+  },
+  {
+    topic: "📌 Funções das Proteínas — Enzimática",
+    question: "Enzimas são proteínas que aceleram reações químicas no corpo. Sem elas, essas reações seriam lentas demais para sustentar a vida. O que é uma enzima, então?",
+    options: [
+      "Um tipo de hormônio que regula a quantidade de proteínas no sangue",
+      "Um catalisador biológico — acelera reações sem ser consumido no processo",
+      "Uma molécula de gordura que protege as proteínas de serem destruídas",
+      "Uma reserva de aminoácidos usada em situações de emergência"
+    ],
+    correct: 1,
+    feedback: "✅ Perfeito! Enzimas são catalisadores biológicos — elas aceleram reações químicas essenciais (digestão, respiração celular, síntese de DNA) sem serem destruídas no processo. A pepsina que digere proteínas no seu estômago é uma enzima. Sem enzimas, a digestão de uma refeição levaria anos!"
+  },
+  {
+    topic: "📌 Funções das Proteínas — Hormonal",
+    question: "Após uma refeição, o nível de glicose no sangue sobe. Qual proteína-hormônio o pâncreas libera para controlar esse aumento?",
+    options: [
+      "Hemoglobina, que carrega o excesso de glicose para o fígado",
+      "Colágeno, que absorve a glicose nos tecidos",
+      "Insulina, que sinaliza às células para absorverem a glicose do sangue",
+      "Glucagon, que aumenta ainda mais a glicose no sangue"
+    ],
+    correct: 2,
+    feedback: "✅ Isso! A insulina é uma proteína-hormônio produzida pelo pâncreas. Ela age como um 'sinal de entrada' para as células absorverem a glicose do sangue, baixando a glicemia após as refeições. O glucagon faz o contrário: quando a glicose está baixa, ele estimula o fígado a liberar glicose guardada. Juntos, mantêm o equilíbrio."
+  },
+  {
+    topic: "📌 Estrutura das Proteínas",
+    question: "A hemoglobina é formada por quatro cadeias de aminoácidos unidas. Isso é um exemplo de qual nível de estrutura proteica?",
+    options: [
+      "Estrutura primária — a sequência linear de aminoácidos",
+      "Estrutura secundária — as dobras em hélice da cadeia",
+      "Estrutura terciária — o dobramento tridimensional de uma cadeia só",
+      "Estrutura quaternária — união de duas ou mais cadeias polipeptídicas"
+    ],
+    correct: 3,
+    feedback: "✅ Exato! A estrutura quaternária é quando duas ou mais cadeias polipeptídicas se unem para formar uma proteína funcional. A hemoglobina tem quatro subunidades. A ordem dos níveis é: primária (sequência de aminoácidos) → secundária (hélices e dobras) → terciária (forma 3D de uma cadeia) → quaternária (várias cadeias juntas)."
+  },
+  {
+    topic: "📌 Digestão e Síntese Proteica",
+    question: "Você come um bife de carne bovina, que é rico em proteínas. Mas o seu músculo não cresce com proteína de boi — ele cresce com proteína humana. Como isso é possível?",
+    options: [
+      "O corpo transforma diretamente a proteína do boi em proteína humana sem quebrá-la",
+      "A digestão quebra as proteínas do boi em aminoácidos livres, que o corpo usa para construir suas próprias proteínas",
+      "Apenas as proteínas vegetais são aproveitadas; proteínas animais são eliminadas na urina",
+      "O corpo armazena as proteínas do boi inteiras no fígado e as usa conforme necessário"
+    ],
+    correct: 1,
+    feedback: "✅ Perfeito! Durante a digestão, enzimas como a pepsina (no estômago) e as proteases (no intestino) quebram as proteínas da comida em aminoácidos individuais. Esses aminoácidos entram na corrente sanguínea e o corpo os usa como 'tijolos' para construir suas próprias proteínas — com a sequência específica do DNA humano."
+  }
+];
+
+let current = 0, score = 0, answered = false, userAnswers = [];
+
+function startQuiz() {
+  current = 0; score = 0; answered = false; userAnswers = [];
+  document.getElementById('intro-screen').style.display = 'none';
+  document.getElementById('progress-area').style.display = 'flex';
+  document.getElementById('question-card').style.display = 'flex';
+  loadQuestion();
+}
+
+function loadQuestion() {
+  answered = false;
+  const q = questions[current];
+  document.getElementById('q-topic').textContent = q.topic;
+  document.getElementById('q-text').textContent = q.question;
+  const letters = ['A','B','C','D'];
+  const grid = document.getElementById('q-options');
+  grid.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectOption(i, btn);
+    grid.appendChild(btn);
+  });
+  const fb = document.getElementById('q-feedback');
+  fb.style.display = 'none'; fb.className = 'feedback-box'; fb.textContent = '';
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('progress-bar').style.width = (current / 10 * 100) + '%';
+  document.getElementById('counter-label').textContent = `Questão ${current + 1} de 10`;
+  document.getElementById('score-label').textContent = `${score} acerto${score !== 1 ? 's' : ''}`;
+}
+
+function selectOption(index, btnClicked) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const allBtns = document.querySelectorAll('.option-btn');
+  allBtns.forEach(b => b.disabled = true);
+  const isCorrect = index === q.correct;
+  if (isCorrect) { score++; btnClicked.classList.add('correct'); }
+  else { btnClicked.classList.add('wrong'); allBtns[q.correct].classList.add('correct'); }
+  userAnswers.push({ questionIndex: current, chosen: index, correct: isCorrect });
+  const fb = document.getElementById('q-feedback');
+  fb.className = 'feedback-box ' + (isCorrect ? 'correct' : 'wrong');
+  fb.textContent = isCorrect ? q.feedback : '❌ Não foi dessa vez! ' + q.feedback.replace('✅ ','').replace('✅','');
+  fb.style.display = 'block';
+  document.getElementById('score-label').textContent = `${score} acerto${score !== 1 ? 's' : ''}`;
+  const btnNext = document.getElementById('btn-next');
+  btnNext.textContent = current < 9 ? 'Próxima ➜' : '🏁 Ver Resultado';
+  btnNext.style.display = 'block';
+}
+
+function nextQuestion() {
+  current++;
+  current < 10 ? loadQuestion() : showResult();
+}
+
+function showResult() {
+  document.getElementById('progress-area').style.display = 'none';
+  document.getElementById('question-card').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'flex';
+  document.getElementById('final-score').textContent = `${score} / 10`;
+  const starsArr = [1,1,1,1,2,2,3,3,4,4,5];
+  document.getElementById('final-stars').textContent = '⭐'.repeat(starsArr[score]);
+  const msgs = [
+    'Calma! Errar faz parte do aprender. Reveja o conteúdo e tente de novo! 💪',
+    'Calma! Errar faz parte do aprender. Reveja o conteúdo e tente de novo! 💪',
+    'Calma! Errar faz parte do aprender. Reveja o conteúdo e tente de novo! 💪',
+    'Calma! Errar faz parte do aprender. Reveja o conteúdo e tente de novo! 💪',
+    'Você está no caminho certo! Ainda dá pra melhorar. 😊',
+    'Você está no caminho certo! Ainda dá pra melhorar. 😊',
+    'Bom trabalho! Você entendeu bastante coisa! 👏',
+    'Bom trabalho! Você entendeu bastante coisa! 👏',
+    'Muito bem! Você arrasou! 🎯',
+    'Muito bem! Você arrasou! 🎯',
+    'PERFEITO! 10/10! Você dominou o conteúdo! 🏆🧬'
+  ];
+  document.getElementById('final-msg').textContent = msgs[score];
+  buildGabarito();
+}
+
+function buildGabarito() {
+  const list = document.getElementById('gabarito-list');
+  list.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  questions.forEach((q, i) => {
+    const ua = userAnswers.find(a => a.questionIndex === i);
+    const wasCorrect = ua && ua.correct;
+    const item = document.createElement('div');
+    item.className = 'gabarito-item' + (wasCorrect ? '' : ' wrong-ans');
+    const chosenText = ua ? `${letters[ua.chosen]}) ${q.options[ua.chosen]}` : 'Não respondida';
+    item.innerHTML = `
+      <div class="g-label">${wasCorrect ? '✅ Acertou' : '❌ Errou'} — Q${i+1}</div>
+      <strong>${q.topic.replace('📌 ','')}</strong><br>
+      ${q.question}<br>
+      <span style="font-size:.9em;color:#444;">Sua resposta: ${chosenText}</span><br>
+      <span style="font-size:.9em;color:#1b4332;">✔ Correta: ${letters[q.correct]}) ${q.options[q.correct]}</span>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function toggleGabarito() {
+  const list = document.getElementById('gabarito-list');
+  list.classList.toggle('open');
+  document.querySelector('.gabarito-toggle').textContent =
+    list.classList.contains('open') ? '🔼 Fechar Gabarito' : '📋 Ver Gabarito';
+}
+
+function restartQuiz() {
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('gabarito-list').classList.remove('open');
+  document.getElementById('intro-screen').style.display = 'flex';
+}
+</script>
+</body>
+</html>
