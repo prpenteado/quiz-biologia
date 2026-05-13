@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧫 Simulado Prova PR – 7º Ano</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #1b2b22;
+    --mid: #2d6a4f;
+    --light: #52b788;
+    --pale: #d8f3dc;
+    --yellow: #f4d03f;
+    --red: #e74c3c;
+    --white: #f9fafb;
+
+    --fs-title:        clamp(1.6rem, 5vw, 3rem);
+    --fs-sub:          clamp(1rem, 3vw, 1.5rem);
+    --fs-topic:        clamp(0.75rem, 2vw, 1rem);
+    --fs-question:     clamp(1.1rem, 3.2vw, 1.85rem);
+    --fs-option:       clamp(1rem, 2.6vw, 1.45rem);
+    --fs-feedback:     clamp(0.9rem, 2.2vw, 1.25rem);
+    --fs-btn:          clamp(1rem, 2.8vw, 1.6rem);
+    --fs-counter:      clamp(0.85rem, 2vw, 1.1rem);
+    --fs-score:        clamp(3rem, 10vw, 5rem);
+    --fs-result-title: clamp(1.4rem, 4vw, 2.4rem);
+    --fs-stars:        clamp(1.8rem, 5vw, 2.5rem);
+
+    --card-pad:    clamp(20px, 4vw, 48px);
+    --gap:         clamp(10px, 2vw, 16px);
+    --letter-size: clamp(34px, 6vw, 44px);
+    --radius: 18px;
+    --shadow: 0 8px 32px rgba(44,106,79,0.13);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #1b2b22 0%, #2d6a4f 60%, #52b788 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(12px, 3vw, 24px);
+  }
+
+  #app { width: 100%; max-width: min(980px, 100%); }
+
+  /* TELA INICIAL */
+  #screen-intro {
+    text-align: center;
+    color: var(--white);
+    animation: fadeIn 0.6s ease;
+    padding: clamp(16px, 4vw, 40px);
+  }
+  .squid-icon {
+    font-size: clamp(52px, 10vw, 88px);
+    line-height: 1; margin-bottom: 12px;
+    display: block;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+  }
+  #screen-intro h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: var(--fs-title);
+    line-height: 1.15; margin-bottom: 8px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  #screen-intro .sub1 { font-size: var(--fs-sub); opacity: 0.88; margin-bottom: 8px; }
+  #screen-intro .sub2 {
+    font-size: clamp(0.85rem, 2.5vw, 1.2rem);
+    opacity: 0.7;
+    margin-bottom: clamp(24px, 5vw, 36px);
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+  }
+  .theme-pill {
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 100px; padding: 4px 14px;
+    font-size: var(--fs-topic); font-weight: 700;
+  }
+  .prof-name { font-size: clamp(0.85rem, 2.5vw, 1.2rem); opacity: 0.7; margin-bottom: 28px; }
+
+  .btn-start, .btn-restart {
+    background: var(--yellow); color: var(--dark);
+    border: none; border-radius: 50px;
+    padding: clamp(14px, 3vw, 20px) clamp(32px, 7vw, 60px);
+    font-family: 'Nunito', sans-serif; font-size: var(--fs-btn); font-weight: 900;
+    cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,0.2); transition: transform 0.15s;
+  }
+  .btn-start:hover, .btn-restart:hover { transform: scale(1.06); }
+  .btn-start:active, .btn-restart:active { transform: scale(0.97); }
+
+  /* PROGRESSO */
+  .progress-wrap { margin-bottom: clamp(14px, 3vw, 24px); }
+  .progress-label {
+    display: flex; justify-content: space-between;
+    font-size: var(--fs-counter); font-weight: 700;
+    color: rgba(255,255,255,0.8); margin-bottom: 8px;
+  }
+  .progress-bar-bg {
+    background: rgba(255,255,255,0.18);
+    border-radius: 50px; height: clamp(7px, 1.5vw, 10px); overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; background: var(--yellow);
+    border-radius: 50px; transition: width 0.5s ease;
+  }
+
+  /* CARD */
+  .card {
+    background: #fff; border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: var(--card-pad);
+    animation: fadeIn 0.6s ease;
+  }
+  .q-label {
+    font-size: var(--fs-topic); font-weight: 700; color: var(--mid);
+    text-transform: uppercase; letter-spacing: 1.5px;
+    margin-bottom: clamp(10px, 2vw, 14px);
+  }
+  .q-text {
+    font-size: var(--fs-question); font-weight: 700; color: var(--dark);
+    line-height: 1.4; margin-bottom: clamp(18px, 4vw, 32px);
+  }
+
+  /* ALTERNATIVAS */
+  .options { display: grid; grid-template-columns: 1fr; gap: var(--gap); }
+  @media (min-width: 640px) { .options { grid-template-columns: 1fr 1fr; } }
+
+  .option {
+    display: flex; align-items: center;
+    gap: clamp(10px, 2vw, 16px);
+    background: var(--pale); border: 3px solid transparent; border-radius: 14px;
+    padding: clamp(12px, 2.5vw, 20px) clamp(14px, 3vw, 24px);
+    font-family: 'Nunito', sans-serif; font-size: var(--fs-option);
+    font-weight: 700; color: var(--dark); cursor: pointer;
+    transition: all 0.18s; user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    text-align: left; width: 100%;
+  }
+  .option:hover:not(.disabled) { border-color: var(--light); background: #b7e4c7; transform: translateY(-2px); }
+  .option:active:not(.disabled) { transform: scale(0.98); }
+  .option.disabled { cursor: default; }
+
+  /* Selecionada — sem revelar certo/errado */
+  .option.selected {
+    border-color: var(--mid);
+    background: #b7e4c7;
+  }
+
+  .letter {
+    background: var(--mid); color: #fff; border-radius: 50%;
+    width: var(--letter-size); height: var(--letter-size); min-width: var(--letter-size);
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(0.9rem, 2vw, 1.2rem); font-weight: 900; flex-shrink: 0;
+  }
+  .option.selected .letter { background: var(--dark); }
+
+  /* No resultado, mostra certo/errado */
+  .option.correct { background: #b7e4c7; border-color: var(--mid); }
+  .option.correct .letter { background: var(--mid); }
+  .option.wrong { background: #fce4e4; border-color: var(--red); }
+  .option.wrong .letter { background: var(--red); }
+
+  /* BOTÃO PRÓXIMA */
+  .btn-next {
+    display: block; margin: clamp(18px, 4vw, 28px) auto 0;
+    background: var(--mid); color: #fff; border: none; border-radius: 50px;
+    padding: clamp(12px, 2.5vw, 16px) clamp(32px, 7vw, 52px);
+    font-family: 'Nunito', sans-serif; font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 900; cursor: pointer; transition: background 0.2s, transform 0.15s;
+    width: 100%; max-width: 320px;
+  }
+  .btn-next:hover { background: #1b4332; transform: scale(1.04); }
+  .btn-next:active { transform: scale(0.97); }
+
+  /* RESULTADO */
+  #screen-result { text-align: center; color: var(--white); animation: fadeIn 0.5s ease; }
+  .result-card {
+    background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: clamp(28px, 6vw, 52px) clamp(20px, 5vw, 48px);
+    margin-bottom: clamp(18px, 4vw, 28px); color: var(--dark);
+  }
+  .result-card h2 { font-family: 'Playfair Display', serif; font-size: var(--fs-result-title); color: var(--mid); margin-bottom: 12px; }
+  .score-number { font-size: var(--fs-score); font-weight: 900; color: var(--mid); line-height: 1; margin: 10px 0; }
+  .score-sub { font-size: clamp(0.95rem, 2.8vw, 1.4rem); color: #555; margin-bottom: 16px; padding: 0 clamp(0px, 4vw, 20px); }
+  .star-row { font-size: var(--fs-stars); margin-bottom: 8px; }
+
+  .review-btn {
+    background: transparent; border: 2px solid var(--mid); color: var(--mid);
+    border-radius: 50px; padding: 10px 28px;
+    font-family: 'Nunito', sans-serif; font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    font-weight: 700; cursor: pointer; margin-bottom: 16px; transition: all 0.2s; width: 100%;
+  }
+  .review-btn:hover { background: var(--mid); color: #fff; }
+  #review-list { text-align: left; margin-top: 16px; }
+  .review-item {
+    border-left: 4px solid; border-radius: 0 10px 10px 0;
+    padding: clamp(8px, 2vw, 12px) clamp(10px, 2.5vw, 16px);
+    margin-bottom: 10px; font-size: clamp(0.85rem, 2.2vw, 1rem); line-height: 1.5;
+  }
+  .review-item.ok-item  { background: #d8f3dc; border-color: var(--mid); }
+  .review-item.err-item { background: #fde8e8; border-color: var(--red); }
+  .review-item strong { display: block; margin-bottom: 4px; font-size: clamp(0.9rem, 2.3vw, 1.05rem); }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- TELA INICIAL -->
+  <div id="screen-intro">
+    <span class="squid-icon">🧫</span>
+    <h1>Simulado — Prova PR</h1>
+    <p class="sub1">Ciências · 7º Ano — Ensino Fundamental</p>
+    <div class="sub2">
+      <span class="theme-pill">🦠 Vírus</span>
+      <span class="theme-pill">🧫 Reino Monera</span>
+      <span class="theme-pill">🔬 Reino Protoctista</span>
+      <span class="theme-pill">🌿 Células Eucariontes</span>
+      <span class="theme-pill">🐾 Classificação dos Seres Vivos</span>
+      <span class="theme-pill">🔤 Nomenclatura Científica</span>
+    </div>
+    <p class="prof-name">Prof. Pierre Penteado</p>
+    <button class="btn-start" onclick="startQuiz()">▶ Iniciar Simulado</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="screen-quiz" class="hidden">
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="q-counter">Questão 1 de 15</span>
+        <span id="q-answered">0 respondidas</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="q-label" id="q-label"></div>
+      <div class="q-text"  id="q-text"></div>
+      <div class="options"  id="options"></div>
+      <button class="btn-next hidden" id="btn-next" onclick="nextQuestion()">Próxima →</button>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="screen-result" class="hidden">
+    <div class="result-card">
+      <h2>Simulado Concluído! 🏆</h2>
+      <div class="star-row"     id="stars"></div>
+      <div class="score-number" id="score-display"></div>
+      <div class="score-sub"    id="score-msg"></div>
+      <button class="review-btn" onclick="toggleReview(this)">📋 Ver gabarito detalhado</button>
+      <div id="review-list" class="hidden"></div>
+    </div>
+    <button class="btn-restart" onclick="restartQuiz()">🔄 Tentar Novamente</button>
+  </div>
+
+</div>
+<script>
+const questions = [
+  {
+    topic: "Célula Eucarionte Animal",
+    question: "Qual parte da célula animal é responsável por produzir energia para ela funcionar?",
+    options: ["Cloroplasto", "Vacúolo", "Mitocôndria", "Parede celular"],
+    answer: 2,
+    explanation: "A mitocôndria é a 'usina de energia' da célula. Ela pega o açúcar do alimento e transforma em energia (ATP). Cloroplasto existe só em plantas; vacúolo central é das plantas; parede celular também é das plantas e bactérias."
+  },
+  {
+    topic: "Célula Eucarionte Vegetal",
+    question: "O que a célula vegetal tem que a célula animal NÃO tem?",
+    options: [
+      "Núcleo e mitocôndria",
+      "Cloroplasto, vacúolo central e parede celular",
+      "Ribossomos e membrana plasmática",
+      "Material genético"
+    ],
+    answer: 1,
+    explanation: "A célula vegetal se diferencia da animal por ter três estruturas extras: o cloroplasto (faz fotossíntese), o vacúolo central grande (guarda água) e a parede celular (dá rigidez). Núcleo, mitocôndria, ribossomos e membrana existem nas duas."
+  },
+  {
+    topic: "Célula Eucarionte Animal e Vegetal",
+    question: "Uma célula tem núcleo, mitocôndria e cloroplasto, mas não tem centríolo. Ela é provavelmente de qual ser vivo?",
+    options: ["Um animal", "Uma bactéria", "Uma planta", "Um vírus"],
+    answer: 2,
+    explanation: "Cloroplasto é exclusivo de plantas e algas. Centríolo existe nas células animais, mas não nas vegetais. Então, uma célula com cloroplasto e sem centríolo é vegetal. Bactérias não têm núcleo; vírus não são células."
+  },
+  {
+    topic: "Classificação dos Seres Vivos",
+    question: "A classificação dos seres vivos divide os organismos em grupos. Qual é a ordem correta, do grupo maior para o menor?",
+    options: [
+      "Espécie → Gênero → Família → Ordem → Classe → Filo → Reino",
+      "Reino → Filo → Classe → Ordem → Família → Gênero → Espécie",
+      "Gênero → Espécie → Família → Ordem → Classe → Filo → Reino",
+      "Reino → Espécie → Família → Ordem → Classe → Filo → Gênero"
+    ],
+    answer: 1,
+    explanation: "A ordem correta é: Reino → Filo → Classe → Ordem → Família → Gênero → Espécie. Uma dica para lembrar: 'Rei Felipe Chegou Ontem Faminto, Gritou Espere!' Espécie é o grupo mais específico, com os seres mais parecidos entre si."
+  },
+  {
+    topic: "Classificação dos Seres Vivos",
+    question: "Dois animais pertencem ao mesmo gênero. O que isso quer dizer?",
+    options: [
+      "Eles são exatamente iguais e podem ter filhos juntos",
+      "Eles são muito parecidos, mas podem ser espécies diferentes",
+      "Eles vivem no mesmo lugar",
+      "Eles têm o mesmo tamanho"
+    ],
+    answer: 1,
+    explanation: "Gênero é um grupo que reúne espécies muito parecidas entre si. Por exemplo, o leão (Panthera leo) e o tigre (Panthera tigris) pertencem ao mesmo gênero (Panthera), mas são espécies diferentes."
+  },
+  {
+    topic: "Nomenclatura Científica",
+    question: "O nome científico do ser humano é Homo sapiens. Como esse nome deve ser escrito corretamente?",
+    options: ["HOMO SAPIENS", "homo sapiens", "Homo sapiens", "Homo Sapiens"],
+    answer: 2,
+    explanation: "Na nomenclatura científica (sistema binomial de Lineu), o nome do gênero começa com letra maiúscula e o da espécie com minúscula: Homo sapiens. O nome deve ser escrito em itálico quando digitado, ou sublinhado quando escrito à mão."
+  },
+  {
+    topic: "Nomenclatura Científica",
+    question: "Por que os cientistas do mundo todo usam o mesmo nome em latim para cada ser vivo?",
+    options: [
+      "Porque o latim é mais bonito que outros idiomas",
+      "Para que todos se entendam, independente do país ou língua que falam",
+      "Porque os seres vivos só existem na Europa",
+      "Porque o latim é mais fácil de aprender"
+    ],
+    answer: 1,
+    explanation: "A nomenclatura científica em latim é universal — funciona como uma 'língua comum' entre cientistas do mundo inteiro. Assim, um pesquisador do Brasil e um do Japão sabem exatamente de qual ser vivo estão falando."
+  },
+  {
+    topic: "Vírus",
+    question: "Por que o vírus não é considerado um ser vivo completo?",
+    options: [
+      "Porque ele é muito pequeno",
+      "Porque ele não tem célula — só tem material genético envolto por uma capa de proteína",
+      "Porque ele vive dentro de outros seres",
+      "Porque ele não causa doenças"
+    ],
+    answer: 1,
+    explanation: "O vírus não tem células, não faz metabolismo próprio e não consegue se reproduzir sozinho — precisa entrar em uma célula hospedeira para isso. É basicamente um pacote de informação genética."
+  },
+  {
+    topic: "Vírus",
+    question: "Qual doença abaixo é causada por vírus?",
+    options: ["Tuberculose", "Gripe (influenza)", "Cólera", "Leptospirose"],
+    answer: 1,
+    explanation: "A gripe é causada pelo vírus Influenza. Tuberculose, cólera e leptospirose são causadas por bactérias. Outras doenças virais: dengue, COVID-19, sarampo, catapora e raiva."
+  },
+  {
+    topic: "Reino Monera",
+    question: "O que faz as bactérias pertencerem ao Reino Monera e não a outros reinos?",
+    options: [
+      "Elas são microscópicas",
+      "Elas são procariontes — não têm núcleo com membrana",
+      "Elas causam doenças",
+      "Elas vivem na água"
+    ],
+    answer: 1,
+    explanation: "O Reino Monera reúne os seres procariontes — aqueles cujo DNA fica solto no citoplasma, sem um núcleo protegido por membrana. Isso inclui bactérias e cianobactérias."
+  },
+  {
+    topic: "Doenças causadas por bactérias",
+    question: "Uma criança foi ao médico com febre, dor de garganta e placas brancas na garganta. O médico disse que era uma infecção bacteriana. Qual dessas doenças pode ser essa?",
+    options: ["Dengue", "Gripe", "Amigdalite bacteriana (estreptocócica)", "Catapora"],
+    answer: 2,
+    explanation: "A amigdalite bacteriana é causada pela bactéria Streptococcus e provoca febre, dor de garganta intensa e placas brancas. Dengue e catapora são causadas por vírus; a gripe também é viral."
+  },
+  {
+    topic: "Doenças causadas por bactérias",
+    question: "Por que é importante tomar todo o antibiótico receitado pelo médico, mesmo quando você já se sente melhor?",
+    options: [
+      "Para a empresa de remédio vender mais",
+      "Porque senão você fica viciado no remédio",
+      "Para garantir que todas as bactérias sejam eliminadas e não criar bactérias resistentes",
+      "Porque o antibiótico só funciona se tomado por muitos dias"
+    ],
+    answer: 2,
+    explanation: "Se você para o antibiótico antes da hora, as bactérias mais resistentes sobrevivem e se reproduzem, criando uma população resistente ao remédio. Por isso, sempre siga o tratamento completo."
+  },
+  {
+    topic: "Reino Protoctista",
+    question: "Os protozoários fazem parte do Reino Protoctista. O que eles têm em comum com células animais e vegetais, mas diferente das bactérias?",
+    options: [
+      "Eles têm parede celular",
+      "Eles são procariontes",
+      "Eles são eucariontes — têm núcleo com membrana",
+      "Eles fazem fotossíntese"
+    ],
+    answer: 2,
+    explanation: "Protozoários são eucariontes — têm núcleo protegido por membrana, assim como células animais e vegetais. Isso os diferencia das bactérias (procariontes). A maioria é unicelular e não faz fotossíntese."
+  },
+  {
+    topic: "Doenças causadas por protozoários",
+    question: "A malária é transmitida pelo mosquito Anopheles. Quem realmente causa a doença dentro do corpo?",
+    options: [
+      "O próprio mosquito, que injeta veneno",
+      "Um vírus que fica na saliva do mosquito",
+      "Um protozoário do gênero Plasmodium, transmitido pelo mosquito",
+      "Uma bactéria que vive na água parada"
+    ],
+    answer: 2,
+    explanation: "O mosquito Anopheles é só o transmissor (vetor). Quem causa a malária é o protozoário Plasmodium, que destrói as células vermelhas do sangue, causando febre alta e outros sintomas graves."
+  },
+  {
+    topic: "Reino Protoctista",
+    question: "As algas também fazem parte do Reino Protoctista. Qual é a importância delas para o planeta?",
+    options: [
+      "Elas servem de alimento apenas para os peixes",
+      "Elas produzem grande parte do oxigênio da Terra por meio da fotossíntese",
+      "Elas limpam a água dos rios absorvendo poluentes",
+      "Elas são usadas para fazer remédios contra bactérias"
+    ],
+    answer: 1,
+    explanation: "As algas realizam fotossíntese e são responsáveis por produzir mais da metade do oxigênio do planeta! Vivem principalmente nos oceanos e são a base de muitas cadeias alimentares aquáticas."
+  }
+];
+
+let current = 0, score = 0, answered = 0;
+let userAnswers = [];
+const letters = ['A','B','C','D'];
+
+function startQuiz() {
+  document.getElementById('screen-intro').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.remove('hidden');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  const total = questions.length;
+  document.getElementById('q-counter').textContent = `Questão ${current + 1} de ${total}`;
+  document.getElementById('q-answered').textContent = `${answered} respondida${answered !== 1 ? 's' : ''}`;
+  document.getElementById('progress-bar').style.width = `${(current / total) * 100}%`;
+  document.getElementById('q-label').textContent = `📌 ${q.topic}`;
+  document.getElementById('q-text').textContent = q.question;
+
+  const optionsEl = document.getElementById('options');
+  optionsEl.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.innerHTML = `<span class="letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => selectOption(i, btn);
+    optionsEl.appendChild(btn);
+  });
+
+  document.getElementById('btn-next').classList.add('hidden');
+}
+
+function selectOption(index, el) {
+  // Permite trocar a resposta antes de avançar
+  const allOptions = document.querySelectorAll('.option');
+  allOptions.forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+
+  // Registra resposta (sobrescreve se mudar)
+  const existing = userAnswers.findIndex(ua => ua.qIdx === current);
+  const isNew = existing === -1;
+  const entry = { qIdx: current, q: questions[current], chosen: index, correct: index === questions[current].answer };
+
+  if (isNew) {
+    userAnswers.push(entry);
+    answered++;
+    document.getElementById('q-answered').textContent = `${answered} respondida${answered !== 1 ? 's' : ''}`;
+  } else {
+    userAnswers[existing] = entry;
+  }
+
+  const btn = document.getElementById('btn-next');
+  btn.classList.remove('hidden');
+  btn.textContent = current + 1 < questions.length ? 'Próxima →' : 'Ver Resultado 🏆';
+}
+
+function nextQuestion() {
+  current++;
+  if (current < questions.length) {
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('screen-result').classList.remove('hidden');
+  document.getElementById('progress-bar').style.width = '100%';
+
+  score = userAnswers.filter(ua => ua.correct).length;
+  const pct = score / questions.length;
+  document.getElementById('score-display').textContent = `${score} / ${questions.length}`;
+
+  const msgs = [
+    [1.0,       "Perfeito! Você arrasou no simulado! 🎉",            "⭐⭐⭐⭐⭐"],
+    [0.8,       "Excelente! Você está bem preparado para a prova!",  "⭐⭐⭐⭐"],
+    [0.6,       "Bom! Revise os tópicos que errou antes da prova.",  "⭐⭐⭐"],
+    [0.4,       "Atenção! Estude mais antes da prova PR.",           "⭐⭐"],
+    [-Infinity, "Não desanime! Releia o caderno e tente de novo.",   "⭐"]
+  ];
+  const [, msg, stars] = msgs.find(([t]) => pct >= t);
+  document.getElementById('score-msg').textContent = msg;
+  document.getElementById('stars').textContent = stars;
+
+  const rev = document.getElementById('review-list');
+  rev.innerHTML = userAnswers.map((ua, i) =>
+    `<div class="review-item ${ua.correct ? 'ok-item' : 'err-item'}">
+      <strong>${i+1}. ${ua.q.question}</strong>
+      ${ua.correct
+        ? `✅ Você acertou: <strong>${letters[ua.chosen]}</strong>`
+        : `❌ Você escolheu <strong>${letters[ua.chosen]}</strong> · Correto: <strong>${letters[ua.q.answer]}</strong>`}
+      <br><em>${ua.q.explanation}</em>
+    </div>`
+  ).join('');
+}
+
+function toggleReview(btn) {
+  const rev = document.getElementById('review-list');
+  rev.classList.toggle('hidden');
+  btn.textContent = rev.classList.contains('hidden') ? '📋 Ver gabarito detalhado' : '🙈 Ocultar gabarito';
+}
+
+function restartQuiz() {
+  current = 0; score = 0; answered = 0; userAnswers = [];
+  document.getElementById('screen-result').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('review-list').classList.add('hidden');
+  document.getElementById('screen-intro').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
